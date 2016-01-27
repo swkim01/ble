@@ -1,5 +1,5 @@
 # ble
-Bluetooth LE related programs
+Bluetooth LE related programs for Raspberry Pi/Linux.
 
 - bledevice.py : basic class module for BLE devices
 - blecomm.py : test program for communicating with an HM-10 BLE module
@@ -22,6 +22,11 @@ sudo pip install pexpect
 # BLE bulb Protocols
 ##[Zengge Bluetooth LED](http://www.enledcontroller.com/picture/show/164.aspx) 
 <a id="Zengge BLE Protocol"></a>
+Originally Zengge BLE bulb can be controlled by the [Magic Light](https://play.google.com/store/apps/details?id=com.Zengge.LEDBluetoothV2) app.
+To execute our control program, use the following command.
+````
+python blebulb.py
+````
 <table>
   <tr>
     <th scope="col">기능</th><th scope="col">명령</th><th scope="col">특성 (핸들)</th><th scope="col">데이터</th>
@@ -50,6 +55,11 @@ sudo pip install pexpect
 
 ##[Yeelight Bedside Lamp](http://item.mi.com/1152300006.html) 
 <a id="Yeelight BLE Protocol"></a>
+Of course, Xiaomi's Yeelight Bedside Lamp can be controlled by the [Yeelight Lamp](https://play.google.com/store/apps/details?id=com.yeelight.cherry) app.
+To execute our control program, use the following command.
+````
+python yeelight.py
+````
 <table>
   <tr>
     <th scope="col">기능</th><th scope="col">명령</th><th scope="col">특성 (핸들)</th><th scope="col">데이터</th>
