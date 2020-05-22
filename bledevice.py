@@ -10,7 +10,7 @@ def scanble(hci="hci0", timeout=1):
     time.sleep(0.2)
 
     conn.expect("LE Scan \.+", timeout=timeout)
-    output = ""
+    output = b""
     adr_pat = "(?P<addr>([0-9A-F]{2}:){5}[0-9A-F]{2}) (?P<name>.*)"
     while True:
         try:
@@ -19,11 +19,12 @@ def scanble(hci="hci0", timeout=1):
         except pexpect.EOF:
             break
 
-    lines = re.split('\r?\n', output.strip())
+    lines = re.split('\r?\n', output.strip().decode("utf-8"))
     lines = list(set(lines))
     lines = [line for line in lines if re.match(adr_pat, line)]
     lines = [re.match(adr_pat, line).groupdict() for line in lines]
     lines = [line for line in lines if re.match('.*', line['name'])]
+    print(lines)
 
     return lines
 
@@ -36,13 +37,13 @@ class BLEDevice:
             self.getcharacteristics()
 
     def connect(self, addr):
-        print "connecting..."
+        print("connecting...")
         # Run gatttool interactively.
         self.gatt = pexpect.spawn("gatttool -b " + addr + " -I")
         self.gatt.expect('\[LE\]>', timeout=10)
         self.gatt.sendline('connect')
         self.gatt.expect('Connection successful.*\[LE\]>', timeout=5)
-        print "Successfully connected!"
+        print("Successfully connected!")
 
     def getservices(self):
         pass
@@ -58,10 +59,10 @@ class BLEDevice:
                 ch_tuple = self.gatt.match.groups()
                 uuid = ch_tuple[3][4:8]
                 self.characteristics[uuid]=ch_tuple
-                #print ch_tuple
+                #print(ch_tuple)
             except pexpect.TIMEOUT:
                 break
-        print "got all characteristics."
+        print("got all characteristics.")
 
     def gethandle(self, uuid):
         ch = self.characteristics[uuid]
@@ -76,6 +77,11 @@ class BLEDevice:
         #cmd = "char-write-cmd 0x%02x %s" % (handle, value.encode('hex'))
         self.gatt.sendline(cmd)
 
+    def writereq(self, handle, value):
+        req = "char-write-req 0x%04x %s" % (handle, value)
+        #cmd = "char-write-cmd 0x%02x %s" % (handle, value.encode('hex'))
+        self.gatt.sendline(req)
+
     def notify(self):
         while True:
             try:
@@ -84,7 +90,7 @@ class BLEDevice:
                 break
             if num == 0:
                 hxstr = self.gatt.after.split()[3:]
-                handle = long(float.fromhex(hxstr[0]))
-                #print "Received: ", hxstr[2:]
+                #handle = long(float.fromhex(hxstr[0]))
+                #print("Received: ", hxstr[2:])
                 return "".join(chr(int(x,16)) for x in hxstr[2:])
         return None

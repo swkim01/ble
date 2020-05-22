@@ -1,12 +1,19 @@
-from Tkinter import *
-from tkColorChooser import askcolor
+import sys
+
+if sys.version_info[0] > 2:
+    from tkinter import *
+    from tkinter.colorchooser import askcolor
+else:
+    from Tkinter import *
+    from tkColorChooser import askcolor
+
 import colorsys
 import math, sys, time
 from bledevice import scanble, BLEDevice
 
 bulb = None
-WRITE_CHAR = "ffe9"
-READ_CHAR = "ffe4"
+WRITE_CHAR = "0000ffe9"
+READ_CHAR = "0000ffe4"
 
 POWER_STX = "cc"
 POWER_ETX = "33"
@@ -35,7 +42,7 @@ class ConnectPanel(Frame):
 
     def scan(self):
         bllist = scanble(timeout=2)
-        print bllist
+        print(bllist)
         if len(bllist) != 0:
             self.bl.set(bllist[0]['addr'])
             menu = self.bles['menu']
@@ -82,7 +89,7 @@ class RgbPanel(Frame):
 
     def getcolor(self):
         self.color = askcolor()
-        print "color is ", self.color
+        print("color is ", self.color)
         self.coll.configure(bg=self.color[1])
 
     def setrgb(self):
@@ -105,7 +112,7 @@ class WarmPanel(Frame):
     def changecolor(self, v):
         value = self.color.get()*255
         color = "#%02x%02x00" % (value, value)
-        #print "color is ", color
+        #print("color is ", color)
         self.scale.configure(bg=color)
 
     def setwarm(self):

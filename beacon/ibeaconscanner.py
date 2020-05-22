@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 import re, sys
 import pexpect
@@ -27,7 +27,7 @@ while True:
         if re.match("^[0-9a-fA-F]{2}\ [0-9a-fA-F]", line.strip()):
             packet += ' ' + line.strip()
         elif re.match("^04\ 3E\ 2A\ 02\ 01\ .{26}\ 02\ 01\ .{14}\ 02\ 15", packet):
-            #print "packet = " + packet
+            #print("packet = " + packet)
             UUID=packet[69:116].replace(' ','')
             UUID=UUID[0:8]+'-'+UUID[8:12]+'-'+UUID[12:16]+'-'+UUID[16:20]+'-'+UUID[20:]
             MAJOR=int(packet[117:122].replace(' ',''),16)
@@ -35,10 +35,10 @@ while True:
             POWER=int(packet[129:131].replace(' ',''),16)-256
             RSSI=int(packet[132:134].replace(' ',''),16)-256
             if len(sys.argv) != 1 and sys.argv[1] == "-b" :
-                print UUID, MAJOR, MINOR, POWER, RSSI
+                print(UUID, MAJOR, MINOR, POWER, RSSI)
             else:
-                print "UUID: %s MAJOR: %d MINOR: %d POWER: %d RSSI: %d" % (UUID, MAJOR, MINOR, POWER, RSSI)
-            print "distance=", measureDistance(POWER, RSSI)
+                print("UUID: %s MAJOR: %d MINOR: %d POWER: %d RSSI: %d" % (UUID, MAJOR, MINOR, POWER, RSSI))
+            print("distance=", measureDistance(POWER, RSSI))
             capturing = 0
             packet=""
         elif len(packet) > 90:

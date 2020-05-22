@@ -36,7 +36,7 @@ while True:
                     typeval = int(data[3:5],16)
                     ed_id = int(data[6:11].replace(' ',''),16)
                     if ed_id != 0xAAFE:
-                        print "Error: %x is not eddystone id!" % (ed_id)
+                        print("Error: %x is not eddystone id!" % (ed_id))
                         break
                     if typeval == 0x02 or typeval == 0x03: #list of 16bit Service UUIDs
                         srv_ident = True
@@ -51,9 +51,9 @@ while True:
                             UUID=namespace[0:8]+'-'+hidden+'-'+namespace[8:]
                             INSTANCEID=data[48:65].replace(' ','')
                             if len(sys.argv) != 1 and sys.argv[1] == "-b" :
-                                print UUID, INSTANCEID, POWER
+                                print(UUID, INSTANCEID, POWER)
                             else:
-                                print "UUID: %s INSTANCEID: %s POWER: %d" % (UUID, INSTANCEID, POWER)
+                                print("UUID: %s INSTANCEID: %s POWER: %d" % (UUID, INSTANCEID, POWER))
                         elif srvtype == 0x01: # Eddystone-URL
                             prefix=int(data[18:20].replace(' ',''),16)
                             URL=""
@@ -69,9 +69,9 @@ while True:
                                 URL=URL.replace(i, expansions[i])
 
                             if len(sys.argv) != 1 and sys.argv[1] == "-b" :
-                                print URL
+                                print(URL)
                             else:
-                                print "URL: %s" % (URL)
+                                print("URL: %s" % (URL))
 
                         elif srvtype == 0x02: # Eddystone-TLM
                             pass
@@ -80,13 +80,13 @@ while True:
                 else:
                     RSSI=int(data[0:2].replace(' ',''),16)
                     if len(sys.argv) != 1 and sys.argv[1] == "-b" :
-                        print RSSI
+                        print(RSSI)
                     else:
-                        print "RSSI: %d" % (RSSI)
-                    print "distance=", measureDistance(POWER, RSSI)
+                        print("RSSI: %d" % (RSSI))
+                    print("distance=", measureDistance(POWER, RSSI))
                     break
                 capturing = 0
-            print "packet = " + packet
+            print("packet = " + packet)
             packet=""
         elif len(packet) > 90:
             capturing = 0
