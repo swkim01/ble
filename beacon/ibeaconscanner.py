@@ -20,12 +20,13 @@ while True:
     line = p.readline()
     if not line: break
     if capturing == 0:
-        if line[0] == '>':
-            packet = line[2:].strip()
+        if line[0] == 62: #'>'
+            packet = line[2:].strip().decode('utf-8')
             capturing = 1
     else:
-        if re.match("^[0-9a-fA-F]{2}\ [0-9a-fA-F]", line.strip()):
-            packet += ' ' + line.strip()
+        strline = line.strip().decode('utf-8')
+        if re.match("^[0-9a-fA-F]{2}\ [0-9a-fA-F]", strline):
+            packet += ' ' + strline
         elif re.match("^04\ 3E\ 2A\ 02\ 01\ .{26}\ 02\ 01\ .{14}\ 02\ 15", packet):
             #print("packet = " + packet)
             UUID=packet[69:116].replace(' ','')
